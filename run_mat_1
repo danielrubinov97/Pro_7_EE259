@@ -1,0 +1,31 @@
+#/bin/csh
+set tf0 = 'tmp'
+set tf1 = 'tmp2'
+set tf2 = ` whoami ` 
+if ( -e $tf0 ) rm $tf0
+if ( -e $tf1 ) rm $tf1
+if ( -e $tf2 ) rm $tf2
+if ( -e tmp1 ) rm tmp1
+if( -e mat_1.m) then
+#	/opt/bin/matlab < mat_1.m 
+	/usr/local/bin/matlab < mat_1.m 
+else
+	echo "Can not find your matlab file: mat_1.m"
+endif
+	ps aux | grep $tf2 > ${tf0}
+#	grep "/usr/local/bin/matlab/bin/so" $tf0 > ${tf1}
+	grep "/usr/local/MATLAB/R2014a/bin/glnxa64/MATLAB" $tf0 > ${tf1}
+
+	if ( -z ${tf1} ) then
+		echo "it is OK"
+	else
+		set tmp1 = `awk '{ print  $2 }' ${tf1} ` 
+		foreach process ( $tmp1) 
+			kill -9 ${process}
+		end
+	endif
+
+	if ( -e $tf0 ) rm $tf0
+	if ( -e $tf1 ) rm $tf1
+	if ( -e tmp1 ) rm tmp1
+
